@@ -1,0 +1,13 @@
+name: DATA608_Assignment3
+title: DATA608_Assignment3
+username:
+account: zachalexander
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2935685
+bundleId: 3701862
+url: https://zachalexander.shinyapps.io/DATA608_Assignment3/
+when: 1601846681.30706
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Assignment 3.pdf|data/cleaned-cdc-mortality-1999-2010-2.csv|Sample Apps/ggplot-reactive.R|Sample Apps/ggplot-simple.R|Sample Apps/ggplot-simplest.R|Sample Apps/plotly-simple.R
