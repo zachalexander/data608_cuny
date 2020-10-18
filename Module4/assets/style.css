@@ -1,0 +1,50 @@
+.page-title {
+    text-align: center;
+}
+
+.author {
+    text-align: center;
+}
+
+.date {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.question-text {
+    margin: 3em auto;
+    text-align: center;
+}
+
+.modebar-container {
+    display: None;
+}
+
+.dropdown {
+    max-width: 400px;
+    margin: auto;
+}
+
+#health-graphic.dash-graph.graph1 {
+    margin: auto !important;
+    max-width: 800px;
+    height: 500px;
+}
+
+.dropdown-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: auto;
+}
+
+.dropdown2 {
+    min-width: 200px;
+}
+
+#steward-graph.dash-graph.graph2 {
+    margin: auto !important;
+    max-width: 800px;
+    height: 500px;
+}
