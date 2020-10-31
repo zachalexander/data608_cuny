@@ -1,0 +1,97 @@
+body {
+    font-family: 'Source Sans Pro', 'Arial', sans-serif;
+    text-align: center;
+}
+
+input {
+    padding: 0.5em;
+}
+
+table {
+    margin: 3em auto;
+    text-align: center;
+    align-items: center;
+    border-collapse: collapse;
+    min-width: 300px;
+}
+
+td, th {
+    padding: 0.5em;
+    border: 1px solid #bbb;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+.wrapper {
+    max-width: 600px;
+    margin: auto;
+}
+
+.assignment {
+    margin-bottom: 0;
+}
+
+.name {
+    margin: 0;
+}
+
+.btn {
+    font-family: 'Source Sans Pro';
+    border: none;
+    padding: 0.5em;
+    font-weight: 800;
+    cursor: pointer;
+    border: 2px solid #333;
+    background: #333;
+    color: #fff;
+    outline: none;
+}
+
+.btn:hover {
+    background: cadetblue;
+    border: 2px solid cadetblue;
+}
+
+.author-wrapper {
+    margin-bottom: 3em;
+}
+
+.question_text {
+    font-size: 0.90em;
+    margin-bottom: 2em;
+    text-align: left;
+}
+
+.highlight {
+    background-color: #8080803b;
+}
+
+#word-target {
+    font-weight: 800;
+    color: #e74c3c;
+    font-size: 1.5em;
+    margin: 2em;
+}
+
+
+.answer_text {
+    font-weight: 800;
+}
+
+#pres-search-target {
+    font-weight: 800;
+    color: #333;
+    font-size: 1.5em;
+    margin: 2em;
+}
+
+span.pres-val {
+    color: #e74c3c;
+}
+
+.filler-bottom {
+    padding: 5em;
+}

@@ -1,171 +1,199 @@
 <html>
-
 <head>
     <title>Zach Alexander - Homework #5</title>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
 </head>
 
 <body>
 
-<h2>DATA 608 - Homework #5</h2>
-<h3>Introduction to Javascript</h3>
-
-<hr>
-<h4>Part 1: Beginner Exercises</h4>
-<hr>
-
-<script type="text/javascript">
-function backward() {
-    initial_word = document.getElementById("word-input").value.toLowerCase();
-    backward_word = initial_word.split('').reverse().join('');
-    var t = document.getElementById("word-target");
-    t.innerHTML = backward_word;
-};
-
-function multiples() {
-    number = document.getElementById("multiples-input").value;
-    multiples_array = [];
-    for (var i = 1; multiples_array.length < 20; i++) {
-        if ((number * i % number) === 0){
-            multiples_array.push(number * i)
-        }
-    }
-    table_html = print_table(multiples_array);
-    var t = document.getElementById("multiples-target");
-    t.innerHTML = table_html;
-}
-
-function print_table(array) {
-    html_array = [];
-    for(i = 0; i < array.length; i++) {
-        if (i === 0) {
-            html_array.push("<table><tr><td>" + array[i] + "</td>")
-        } else if (i === 4 | i === 8 | i === 12 | i === 16) {
-            html_array.push("</tr><tr><td>" + array[i] + "</td>" )
-        } else if (i === 19) {
-            html_array.push("<td>" + array[i] + "</td></tr></table>")
-        } 
-        else {
-            html_array.push("<td>" + array[i] + "</td>")
-        }
-    }
-    return html_array.join('')
-}
-</script>
-
-<br>
-<p class="question_text">
-    Create a function to reverse any word that you type in. This can be typed into either an input 
-    box or an alert box, and then print the result in a box or on the webpage.
-</p>
-<p>Please type a word and then click the button to see it backwards!</p>
-
-<p>
-<form>
-    <input id="word-input" type="text">
-    <input type="button" value="See the word backwards" onClick="backward()">
-</form>
-</p>
-
-<div id="word-target"></div>
-
-<br>
-
-<p class="question_text">
-    Create a function that takes an input number, and prints a table with the first 20 multiples of
-    the number, in order 5x4
-</p>
-
-<p>Please type a number and find its first 20 multiples!</p>
-
-<p>
-<form>
-    <input id="multiples-input" type="number">
-    <input type="button" value="Find multiples" onClick="multiples()">
-</form>
-</p>
-<div id="multiples-target"></div>
-
-<hr>
-<h4>Part 2: Intermediate Exercises</h4>
-<hr>
-
-<script type="text/javascript">
-
-function load_data(){
-    d3.csv("/data/presidents.csv", function(data) {
-        presidents = []
-        data.map(function(d) {
-            presidents.push(d);
-        });
-        var html = make_table(presidents)
-        var t = document.getElementById("pres-table");
-        t.innerHTML = html;
-    });
-}
-
-function make_table(array){
-    html_array = ["<table><th>President's Name</th><th>Height</th><th>Weight<th>"]
-    array.map(function(d){
-        html_array.push(
-            "<tr><td class=" + "presname" + ">"+ d.Name + "</td>" + 
-            "<td class=" + "presheight" + ">" + d.Height + "</td>" + 
-            "<td class=" + "presweight" + ">" + d.Weight + "</td></tr>"
-        )
-    })
-    html_array.push("</table>")
-    return html_array.join('');
-}
-
-load_data();
-
-function president_filter(){
-    president_input = document.getElementById("president-filter").value;
-
-    d3.selectAll('.presname').map(function(elements){
-        search_array = []
-        elements.map(function(d){
-            if(d.innerHTML === president_input){
-                parent_html = d.parentNode
-                weight = parent_html.getElementsByClassName('presweight')[0].innerText;
-                height = parent_html.getElementsByClassName('presheight')[0].innerText;
-                search_array.push(d.innerHTML, height, weight);
-
-                if(search_array.length === 0) {
-                    console.log('sorry, wrong input')
-                } else {
-                    var t = document.getElementById("pres-search-target");
-                    t.innerHTML = "<p>" + search_array[0] + "'s" + " height was recorded at " + 
-                        search_array[1] + " inches and his weight at " + 
-                        search_array[2] + " pounds.</p>";
-                }
-                
+<div class="wrapper">
+    <h2>DATA 608 - Homework #5</h2>
+    <h3 class="assignment">Introduction to Javascript</h3>
+    <div class="author-wrapper">
+        <h4 class="name">Zach Alexander</h4>
+        <h4 class="name">November 1st, 2020</h4>
+    </div>
+    
+    <hr>
+    <h4>Part 1: Beginner Exercises</h4>
+    <hr>
+    
+    <script type="text/javascript">
+    function backward() {
+        initial_word = document.getElementById("word-input").value.toLowerCase();
+        backward_word = initial_word.split('').reverse().join('');
+        var t = document.getElementById("word-target");
+        t.innerHTML = backward_word;
+    };
+    
+    function multiples() {
+        number = document.getElementById("multiples-input").value;
+        multiples_array = [];
+        for (var i = 1; multiples_array.length < 20; i++) {
+            if ((number * i % number) === 0){
+                multiples_array.push(number * i)
             }
+        }
+        table_html = print_table(multiples_array);
+        var t = document.getElementById("multiples-target");
+        t.innerHTML = table_html;
+    }
+    
+    function print_table(array) {
+        html_array = [];
+        for(i = 0; i < array.length; i++) {
+            if (i === 0) {
+                html_array.push("<table><tr><td>" + array[i] + "</td>")
+            } else if (i === 4 | i === 8 | i === 12 | i === 16) {
+                html_array.push("</tr><tr><td>" + array[i] + "</td>" )
+            } else if (i === 19) {
+                html_array.push("<td>" + array[i] + "</td></tr></table>")
+            } 
+            else {
+                html_array.push("<td>" + array[i] + "</td>")
+            }
+        }
+        return html_array.join('')
+    }
+    </script>
+    
+    <br>
+    <p class="question_text">
+        <span class="highlight">
+            Exercise: Create a function to reverse any word that you type in. This can be typed into either an input 
+            box or an alert box, and then print the result in a box or on the webpage.
+        </span>
+    </p>
+    <p class="answer_text">Please type a word and then click the button to see it backwards!</p>
+    
+    <form>
+        <input id="word-input" type="text">
+        <input type="button" class="btn" value="See the word backwards" onClick="backward()">
+    </form>
+    
+    <div id="word-target"></div>
+    
+    <p class="question_text">
+        <span class="highlight">
+            Exercise: Create a function that takes an input number, and prints a table with the first 20 multiples of
+            the number, in order 5x4
+        </span>
+    </p>
+    
+    <p class="answer_text">Please type a number and find its first 20 multiples by clicking the button!</p>
+    
+    <p>
+    <form>
+        <input id="multiples-input" type="number">
+        <input type="button" class="btn" value="Find multiples" onClick="multiples()">
+    </form>
+    </p>
+    <div id="multiples-target"></div>
+    
+    <br>
+    <br>
+    
+    <hr>
+    <h4>Part 2: Intermediate Exercises</h4>
+    <hr>
+    
+    <script type="text/javascript">
+    
+    function load_data(){
+        d3.csv("https://zachalexander.github.io/module5-deploy/data/presidents.csv", function(elements) {
+            presidents = []
+            elements.map(function(d) {
+                presidents.push(d);
+            });
+            var html = make_table(presidents)
+            var t = document.getElementById("pres-table");
+            t.innerHTML = html;
+        });
+    }
+    
+    function make_table(array){
+        html_array = ["<table><th>President's Name</th><th>Height</th><th>Weight</th>"]
+        array.map(function(d){
+            html_array.push(
+                "<tr><td class=" + "presname" + ">"+ d.Name + "</td>" + 
+                "<td class=" + "presheight" + ">" + d.Height + "</td>" + 
+                "<td class=" + "presweight" + ">" + d.Weight + "</td></tr>"
+            )
         })
-    })
-}
+        html_array.push("</table>")
+        return html_array.join('');
+    }
+    
+    load_data();
+    
+    function president_filter(){
+        president_input = document.getElementById("president-filter").value;
+    
+        d3.selectAll('.presname').map(function(elements){
+            search_array = []
+            elements.map(function(d){
+                if(d.innerHTML === president_input){
+                    parent_html = d.parentNode
+                    weight = parent_html.getElementsByClassName('presweight')[0].innerText;
+                    height = parent_html.getElementsByClassName('presheight')[0].innerText;
+                    search_array.push(d.innerHTML, height, weight);
+    
+                    if(search_array.length === 0) {
+                        console.log('no input')
+                    } else {
+                        var t = document.getElementById("pres-search-target");
+                        t.innerHTML = "<p>" + search_array[0] + "'s" + " height was recorded at <span class=" + "pres-val" + ">" + 
+                            search_array[1] + " inches</span> and his weight at <span class=" + "pres-val" + ">" + 
+                            search_array[2] + " pounds</span>.</p>";
+                    }
+                    
+                } else if (search_array.length === 0) {
+                    var t = document.getElementById("pres-search-target");
+                    t.innerHTML = "<p>Sorry, please enter the correct spelling for a president in the table above.</p>"
+                }
+            })
+        })
+    }
+    
+    
+    
+    </script>
+    
+    <p class="question_text">
+        <span class="highlight">
+            Exercise: Write a function to load the presidents.csv data and display the data as an html table (you 
+            may use a cdv parser from any available library, though I encourage you to try the d3 one).
+        </span>
+    </p>
 
+        <p class="answer_text">See the loaded table below:</p>
+        
+        <div id="pres-table"></div>
 
+        <br>
+    <p class="question_text">
+        <span class="highlight">
+            Exercise: Now that you have the presidents data loaded, write a function that will return that 
+            president's height & weight when you type it in. This can be typed into either an input box or 
+            an alert box, and then print the result in a box or on the webpage.
+        </span>
+    </p>
 
-</script>
+    <p class="answer_text">Please type the name of a president and then click the button to find their height and weight!</p>
+    
+    <form>
+        <input id="president-filter" type="text">
+        <input type="button" class='btn' value="Find Height and Weight" onClick="president_filter()">
+    </form>
+    
+    <div id="pres-search-target"></div>
 
-<p class="question_text">
-    Write a function to load the presidents.csv data and display the data as an html table (you 
-    may use a cdv parser from any available library, though I encourage you to try the d3 one). <br>
+    <div class="filler-bottom"></div>
+    
+</div>
 
-    Now that you have the presidents data loaded, write a function that will return that 
-    president's height & weight when you type it in. This can be typed into either an input box or 
-    an alert box, and then print the result in a box or on the webpage.
-</p>
-
-<form>
-    <input id="president-filter" type="text">
-    <input type="button" value="Find Height and Weight" onClick="president_filter()">
-</form>
-
-<div id="pres-search-target"></div>
-
-<div id="pres-table"></div>
 
 </body>
 </html>
