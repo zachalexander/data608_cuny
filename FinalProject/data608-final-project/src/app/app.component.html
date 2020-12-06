@@ -1,0 +1,60 @@
+
+<h1 class="page-title">Projected temperature warming <br/> in the 21st Century <br /> under two different worlds</h1>
+
+<div class="top-summary">
+  <p>This set of visualizations are based on temperature data derived from multiple global circulation models (GCMs), 
+  aggregated to the country level for months and years in four future time periods.  
+  The ensemble data depict the <strong>median</strong> range of model outputs run under each of two scenarios, "A2" and "B1".  
+  More data is available via the Climate Data API, documented at 
+  <a href="http://data.worldbank.org/developers/climate-data-api" target="_blank">http://data.worldbank.org/developers/climate-data-api</a>.</p>
+
+</div>
+
+
+<div class="button-div">
+  <button *ngIf="!scenarioAtwo" mat-stroked-button color="warn" (click)="scenarioA2()">Scenario A2</button>
+  <button *ngIf="scenarioAtwo" mat-flat-button color="warn">Scenario A2</button>
+  <button *ngIf="!scenarioBone" mat-stroked-button color="warn" (click)="scenarioB1()">Scenario B1</button>
+  <button *ngIf="scenarioBone" mat-flat-button color="warn">Scenario B1</button>
+</div>
+
+<div *ngIf="scenarioBone" class="scenario-div">
+  <small class="scenario-description">
+    <p><strong class="highlight-scenario">Scenario B1</strong>: Models temperature predictions from a <strong class="highlight">more integrated, ecologically friendly world </strong>based on:</p>
+    <ul class="conditions">
+      <li>Rapid economic growth, but with rapid changes towards a service and information economy.</li>
+      <li>Population rising to 9 billion in 2050 and then declining.</li>
+      <li>Reductions in material intensity and the introduction of clean and resource efficient technologies.</li>
+      <li>An emphasis on global solutions to economic, social and environmental stability.</li>
+    </ul>
+  </small>
+</div>
+
+<div *ngIf="scenarioAtwo" class="scenario-div">
+  <small class="scenario-description">
+    <p><strong class="highlight-scenario">Scenario A2</strong>: Models temperature predictions from a <strong class="highlight">more divided world </strong> based on:</p>
+    <ul class="conditions">
+      <li>A world of independently operating, self-reliant nations.</li>
+      <li>Continuously increasing population.</li>
+      <li>Regionally oriented economic development.</li>
+      <li>High emissions.</li>
+    </ul>
+  </small>
+</div>
+
+
+<div id = 'title'>
+  <button *ngIf=!play (click)="playButton()" mat-mini-fab color="warn" id="play" aria-label="Example icon button with a menu icon">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button *ngIf=refresh (click)="refreshButton()" mat-mini-fab color="warn" id="refresh" aria-label="Example icon button with a menu icon">
+    <mat-icon>refresh</mat-icon>
+  </button>
+ 
+  
+</div>
+
+<h2 class="title-tag">{{titleTag}}</h2>
+<mat-slider min={{min}} max={{max}} step={{step}} value={{value}} tickInterval={{tickInterval}} disabled="false"  color="warn" (input)="pitch($event)"></mat-slider>
+<img class="svg-tempscale" src='../assets/temp-scale-lrg.png'>
+<div class = "world-map"></div>
