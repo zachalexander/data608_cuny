@@ -10,6 +10,15 @@ import * as secondModel_b1 from '../assets/second20_med_b1.json';
 import * as thirdModel_b1 from '../assets/third20_med_b1.json';
 import * as fourthModel_b1 from '../assets/fourth20_med_b1.json';
 
+import * as topTen_a2 from '../assets/top10_a2.json';
+import * as topTen_b1 from '../assets/top10_b1.json';
+
+import * as russiaMap from '../assets/russia.json';
+import * as afghanistanMap from '../assets/afghanistan.json';
+import * as canadaMap from '../assets/canada.json';
+import { setClassMetadata } from '@angular/core/src/r3_symbols';
+
+
 
 @Component({
   selector: 'app-root',
@@ -31,6 +40,13 @@ export class AppComponent {
   secondModel_b1 = secondModel_b1['default']
   thirdModel_b1 = thirdModel_b1['default']
   fourthModel_b1 = fourthModel_b1['default']
+
+  russiaMapData = russiaMap['default']
+  afghanistanMapData = afghanistanMap['default']
+  canadaMapData = canadaMap['default']
+
+  topTen_a2Data = topTen_a2['top-ten-bar-a2']
+  topTen_b1Data = topTen_b1['top-ten-bar-b1']
 
   dateRange = ['2020 - 2040', '2040 - 2060', '2060 - 2080', '2080 - 2100'];
   titleTag;
@@ -56,6 +72,8 @@ export class AppComponent {
   scenarioAtwo = true;
   scenarioBone = false;
 
+  canadaPick = false;
+
   getSliderTickInterval(): number | 'auto' {
     if (this.showTicks) {
       return this.autoTicks ? 'auto' : this.tickInterval;
@@ -66,14 +84,19 @@ export class AppComponent {
 
   ngOnInit() {
     let width = window.innerWidth;
-
     this.jsons = this.jsons_a2;
 
-    if (width > 1000) {
-      width = 1000;
+    if (width > 500) {
+      width = 500;
     }
 
     this.setMap(1000, 600, this.jsons[0])
+    this.drawBarChart(width, this.topTen_a2Data, '.top10-a2');
+    this.drawBarChart(width, this.topTen_b1Data, '.top10-b1');
+
+    this.drawCountry(this.russiaMapData, '.russia-map', 300, 200, [0, 250], 90)
+    this.drawCountry(this.canadaMapData, '.canada-map', 300, 200, [310, 260], 90)
+    this.drawCountry(this.afghanistanMapData, '.afghanistan-map', 300, 200, [-480, 510], 650)
   }
 
   scenarioA2(){
@@ -121,6 +144,7 @@ export class AppComponent {
     height = height - margin.top - margin.bottom;
 
     const projection = d3.geoMercator()
+    .rotate([-11, 0])
     .scale(1)
     .translate([0, 0]);
 
@@ -187,6 +211,8 @@ export class AppComponent {
     .range(['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'])
     .domain(color_domain);
 
+    console.log(json[i].features)
+
 
     svg.selectAll('path')
        .data(json[i].features)
@@ -238,6 +264,213 @@ export class AppComponent {
     this.play = false;
     this.refresh = false;
     this.value = 2040;
+  }
+
+  drawBarChart(width, dataset, divname) {
+
+    const svgbar = d3.select(divname)
+    .append('svg')
+    .attr('width', width)
+    .attr('height', '400')
+    .classed('overall-bar', true);
+
+    const color_domain = [2.5, 4, 7, 9, 10];
+    
+    const color_legend = d3.scaleThreshold<string>()
+    .range(['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#de2d26', '#a50f15'])
+    .domain(color_domain);
+
+    const margin = { top: 20, right: 50, bottom: 20, left: 50 };
+    const height = 400 - margin.top - margin.bottom;
+
+    const xScale = d3.scaleLinear().rangeRound([0, width]);
+    const yScale = d3.scaleBand().rangeRound([0, height]).padding(0.05);
+    
+    xScale.domain([0, 12]);
+    yScale.domain(dataset.map((d) => d['country']));
+
+    svgbar.append('g')
+    .selectAll('rect')
+    .data(dataset)
+    .enter().append('rect')
+    .attr('y', function (d) { return yScale(d['country']); })
+    .attr('x', 10)
+    .attr('height', yScale.bandwidth())
+    .attr('width', function (d) {
+      return xScale(d['temp']) - margin.right - 30;
+    })
+    .attr('fill', function(d) {
+      return color_legend(d['temp']);
+    })
+    .classed('temp-rects');
+
+    svgbar.selectAll('rect.temp-rects')
+    .data(dataset)
+    .enter().append('text')
+    .attr('x', 20)
+    .attr('y', function(d) { 
+      return yScale(d['country']) + yScale.bandwidth() / 2 + 4; 
+    })
+    .text(function(d) {
+      return d['country'] + ' (' + '+' + d['temp'] + '\xB0' + 'F)';
+    })
+    .style('font-size', '12px')
+    .style('font-weight', '600')
+    .style('fill', '#ffffff')
+    .style('font-family', 'Montserrat')
+  }
+
+  drawCountry(countryjson, countrydiv, width, height, translate, scale) {
+
+    const projection = d3.geoMercator()
+    .rotate([-11, 0])
+    .scale(scale)
+    .translate(translate);
+
+    const path = d3.geoPath()
+              .projection(projection);
+  
+    const svg = d3.select(countrydiv)
+                .append('svg')
+                .attr('class', 'country')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', '0 0 300 200')
+                .attr('preserveAspectRatio', 'xMidYMid')
+                .style('max-width', 1200)
+                .style('margin', 'auto')
+                .style('display', 'flex');
+
+            
+    svg.selectAll('path')
+      .data(countryjson)
+      .enter()
+      .append('path')
+      .attr('d', path)
+      .style('fill', '#fcbba1')
+      .style('stroke', '#de2d26')
+      .style('stroke-width', '0.5')
+      .on('mouseover', function (d) {
+
+        d3.select(this)
+          .style('cursor', 'crosshair')
+          .style('stroke-width', '1.5')
+          .style('font-size', '2em')
+
+      })
+      .on('mouseout', function (d) {
+        d3.select(this)
+          .style('stroke-width', '0.5');
+      })
+      .style('fill', '#fcbba1')
+      .on('click', function(d) {
+
+        d3.select('.jumbo').remove()
+        
+        const margin = {top: 10, right: 10, bottom: 10, left: 10};
+
+        const data = d['trend-data'];
+        const width = 400;
+        const yheight = 200;
+        const height = 300;
+
+        const parseTime = d3.timeParse('%m/%d/%Y');
+
+        const x = d3.scaleTime().range([0, width - margin.left - margin.right - 30]);
+        x.domain(d3.extent(data, function(d) { return parseTime(d.date); }));
+
+        const y = d3.scaleLinear().range([yheight, 0]).nice();
+        y.domain([0, d3.max(data, function(d) { return d.a2; })]);
+
+
+        const valueline = d3.line()
+        .x(function(d) { return x(parseTime(d.date)); })
+        .y(function(d) { return y(d.a2) + margin.top + margin.bottom; })
+        .curve(d3.curveMonotoneX);
+
+        const valueline_b = d3.line()
+        .x(function(d) { return x(parseTime(d.date)); })
+        .y(function(d) { return y(d.b1) + margin.top + margin.bottom; })
+        .curve(d3.curveMonotoneX);
+
+        const svg = d3.select('.line-wrapper').append('svg')
+        .attr('width',  width - margin.left - margin.right + 20)
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('class', 'jumbo')
+        .append('g')
+        .attr('transform', 'translate(20, 0)')
+
+        // Add the x-axis.
+        svg.append('g')
+              .attr("class", "y-axis")
+              .attr("transform", "translate(0," + (margin.top + margin.bottom) + ")")
+              .call(d3.axisLeft(y).ticks(4).tickSizeOuter(0).tickSize(0));
+
+        svg.append('g')
+              .attr("class", "x-axis")
+              .attr("transform", "translate(0," + (yheight + margin.top + margin.bottom) + ")")
+              .call(d3.axisBottom(x).ticks(4).tickSizeOuter(1).tickSize(0));
+
+        d3.select('.x-axis .tick:first-child').remove()
+
+        const path = svg.append('path')
+        .datum(data)
+        .attr('class', 'line')
+        .attr('fill', 'none')
+        .attr('stroke-width', '3px')
+        .attr('stroke', '#de2d26')
+        .attr('d', valueline);
+
+        const path_b = svg.append('path')
+        .datum(data)
+        .attr('class', 'line')
+        .attr('fill', 'none')
+        .attr('stroke-width', '3px')
+        .attr('stroke', '#fc9272')
+        .attr('d', valueline_b);
+
+        const totalLength = path.node().getTotalLength();
+
+        path.attr('stroke-dasharray', totalLength + ' ' + totalLength)
+        .attr('stroke-dashoffset', totalLength)
+        .transition()
+        .on('start', function repeat() {
+            d3.active(this)
+                .duration(3000)
+                .ease(d3.easeLinear)
+                .attr('stroke-dashoffset', 0);
+        });
+
+        path_b.attr('stroke-dasharray', totalLength + ' ' + totalLength)
+        .attr('stroke-dashoffset', totalLength)
+        .transition()
+        .on('start', function repeat() {
+            d3.active(this)
+                .duration(3000)
+                .ease(d3.easeLinear)
+                .attr('stroke-dashoffset', 0);
+        });
+      })
+
+    svg.selectAll('text')
+      .data(countryjson)
+      .enter().append('text')
+      .attr('x', function(d) {
+        return path.centroid(d)[0];
+      })
+      .attr('y', function(d) {
+          return path.centroid(d)[1];
+      })
+      .attr('text-anchor', 'middle')
+      .attr('font-size', '1.25em')
+      .attr('font-weight', '600')
+      .attr('fill', '#a50f15')
+      .text(function(d){
+        return d.properties.name;
+      })
+
   }
 
 }

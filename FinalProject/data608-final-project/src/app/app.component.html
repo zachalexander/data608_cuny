@@ -56,5 +56,29 @@
 
 <h2 class="title-tag">{{titleTag}}</h2>
 <mat-slider min={{min}} max={{max}} step={{step}} value={{value}} tickInterval={{tickInterval}} disabled="false"  color="warn" (input)="pitch($event)"></mat-slider>
-<img class="svg-tempscale" src='../assets/temp-scale-lrg.png'>
+<img class="svg-tempscale" src='../assets/temp-scale-svg.svg'>
 <div class = "world-map"></div>
+
+<div class="top-ten">
+  <h2 class="section-title">Which countries will experience the most warming by 2100?</h2>
+  <p class="summary">Based on analysis of the temperature models, the median estimates predict the following countries will have the most warming by the next century:</p>
+  <div class="bar-graphics">
+    <h3 class="chart-title">Under Scenario A2</h3>
+    <div class = "top10-a2"></div>
+    <h3 class="chart-title">Under Scenario B1</h3>
+    <div class = "top10-b1"></div>
+  </div>
+</div>
+
+<div class="geopolitics">
+  <h2 class="section-title">Warming countries and their effect on geopolitics</h2>
+
+  <div class="country-wrapper">
+    <div class = "russia-map"></div>
+    <div class = "russia-chart"></div>
+    <div class = "canada-map"></div>
+    <div class = "afghanistan-map"></div> 
+  </div>
+
+  <div class="line-wrapper"></div>
+</div>
