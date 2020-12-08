@@ -5,7 +5,7 @@
   <p>This set of visualizations are based on temperature data derived from multiple global circulation models (GCMs), 
   aggregated to the country level for months and years in four future time periods.  
   The ensemble data depict the <strong>median</strong> range of model outputs run under each of two scenarios, "A2" and "B1".  
-  More data is available via the Climate Data API, documented at 
+  More data are available via the Climate Data API, documented at 
   <a href="http://data.worldbank.org/developers/climate-data-api" target="_blank">http://data.worldbank.org/developers/climate-data-api</a>.</p>
 
 </div>
@@ -71,14 +71,85 @@
 </div>
 
 <div class="geopolitics">
-  <h2 class="section-title">Warming countries and their effect on geopolitics</h2>
+  <h2 class="section-title">What a warming planet means for a few key nations</h2>
 
   <div class="country-wrapper">
-    <div class = "russia-map"></div>
-    <div class = "russia-chart"></div>
-    <div class = "canada-map"></div>
-    <div class = "afghanistan-map"></div> 
+    <div class = "russia-map" (click)="scrollDiv(target)"></div>
+    <div class = "canada-map" (click)="scrollDiv(target)"></div>
   </div>
 
-  <div class="line-wrapper"></div>
+  <div class="country-wrapper">
+    <div class = "us-map" (click)="scrollDiv(target)"></div> 
+    <div class = "afghanistan-map" (click)="scrollDiv(target)"></div>
+  </div>
+
+  <div class = "geopolitics-display" #target>
+    <div class="line-wrapper"></div>
+    <div class="country-content">
+      <div class = "canada-div">
+        <div class="line-wrapper"></div>
+        <h2 class="projection-country">Canada</h2>
+        <p class="projection-title">Projected Temperature Change by 2100</p>
+        <div class="projection-summary">
+          <small class="projection-a2"><strong>Scenario A2:</strong> 10.15 &#176;F</small>
+          <small class="projection-b1"><strong>Scenario B1:</strong> 6.37 &#176;F</small>
+        </div>
+        <p>
+          As mentioned in <a href="https://www.klimatilpasning.dk/media/1154179/The%20geopolitics%20of%20CC.pdf" target="_blank">"The Geopolitics of Climate Change"</a>, by Peter Halden, apart from 
+          widespread socioeconomic impacts of a warming Canadian province are the threats of
+          "land grabs" spurred on by climate conflicts. With temperatures rising throughout a vast Canadian wilderness, thawing ice will expose land
+          to valuable resources that could potentially lead to climate wars between Canada and Russia -- two competing enterprises for untouched land 
+          to the north. Militarization of climate change is not out of the realm of possibility, and diplomatic moves in the near future could be the onset of this phenomenon.
+        </p>
+      </div>
+      <div class = "russia-div">
+        <div class="line-wrapper"></div>
+        <h2 class="projection-country">Russia</h2>
+        <p class="projection-title">Projected Temperature Change by 2100</p>
+        <div class="projection-summary">
+          <small class="projection-a2"><strong>Scenario A2:</strong> 11.49 &#176;F</small>
+          <small class="projection-b1"><strong>Scenario B1:</strong> 6.90 &#176;F</small>
+        </div>
+        <p>
+          Other than potential land disputes with Canada and other neighbors in the Arctic, according to <a href="https://foreignpolicy.com/2020/10/05/climate-geopolitics-petrostates-russia-china/" target="_blank">sources</a> , Russia already holds a large share of the world's natural gas market, which could likely increase
+          as moves towards more sustainable forms of energy start to take shape. Natural gas is more low-carbon than oil, and it can also be converted to other fuels such as hydrogen. With such a large share of gas reserves,
+          and potential shifts to increasing dominance of the energy grid in the years to come, diplomatic relations between Russia and the rest of the world will be paramount. Russia has already had run-ins with other
+          countries, including the United States, and this imbalance of resources could lead to further conflicts in the future.
+        </p>
+      </div>
+      <div class = "afghanistan-div">
+        <div class="line-wrapper"></div>
+        <h2 class="projection-country">Afghanistan</h2>
+        <p class="projection-title">Projected Temperature Change by 2100</p>
+        <div class="projection-summary">
+          <small class="projection-a2"><strong>Scenario A2:</strong> 9.49 &#176;F</small>
+          <small class="projection-b1"><strong>Scenario B1:</strong> 5.58 &#176;F</small>
+        </div>
+        <p>
+          According to <a href="https://www.nationalgeographic.com/science/2020/02/afghan-struggles-to-rebuild-climate-change-complicates/#:~:text=Afghanistan%20is%20one%20of%20the,Afghanistan%E2%80%94are%20set%20to%20worsen." target="_blank">National Geographic</a>
+          Afghanistan is one of the most vulnerable countries in the world to climate change. Experts say drought, flood, avalanches, landslides, extreme weather, 
+          mass displacement, conflict, and child marriage—all of which already plague Afghanistan—are set to worsen. This'll likely affect the entire region and 
+          impact diplomatic relations across the globe. Although Afghanistan is highlighted here, other Middle Eastern countries are also likely to experience similar
+          challenges due to the unequal warming of our planet. This could lead to catastrophic shortages of food, water, and energy (including oil).
+        </p>
+      </div>
+      <div class = "us-div">
+        <div class="line-wrapper"></div>
+        <h2 class="projection-country">United States of America</h2>
+        <p class="projection-title">Projected Temperature Change by 2100</p>
+        <div class="projection-summary">
+          <small class="projection-a2"><strong>Scenario A2:</strong> 8.73 &#176;F</small>
+          <small class="projection-b1"><strong>Scenario B1:</strong> 5.45 &#176;F</small>
+        </div>
+        <p>
+          As one of the leading emitters of carbon, the United States will undoubtedly be one of the major players in climate change geopolitics in the 21st century. However, 
+          from a diplomatic perspective, it will largely depend on federal leadership. With the Trump Administration's recent departure from the Paris Climate Agreement in 2017,
+          the nation has a lot of external relationships to reconcile in order to be viewed as a global leader in the effort. Will the United States seek to build ties with other
+          countries in an effort to build a more collaborative climate future? Or will there be more internal stalemates and partisanship on behalf of a more unified front to 
+          mitigate the effects of a warming planet.
+        </p>
+      </div>
+    </div>
+  </div>
+
 </div>

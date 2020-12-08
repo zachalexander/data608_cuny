@@ -10,3 +10,24 @@ body {
     font-family: 'Roboto', 'Arial', sans-serif !important;
     color: #333 !important;
 }
+
+g.tick line {
+    opacity: 0;
+}
+
+g.y-axis path, g.x-axis path {
+    opacity: 0;
+}
+
+g.x-axis text, g.y-axis text {
+    font-weight: 600;
+    color: #333;
+    font-size: 1em;
+    font-family: 'Montserrat', 'Roboto', 'Arial', sans-serif;
+}
+
+g.legend text {
+    font-family: 'Roboto', 'Arial', sans-serif;
+    font-family: 600;
+    font-size: 0.75em;
+}

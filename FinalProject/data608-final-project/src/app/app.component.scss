@@ -138,17 +138,86 @@
 .country-wrapper {
   display: flex;
   justify-content: space-evenly;
-  max-width: 1000px;
+  max-width: 600px;
   margin: auto;
 }
 
 .line-wrapper {
   display: flex;
   justify-content: center;
-  margin: auto;
   max-width: 700px;
+  align-self: center;
 }
 
-.x-axis {
-  padding-top: 1em;
+
+.geopolitics-display {
+  display: flex;
+  justify-content: space-evenly;
+  max-width: 1000px;
+  margin: 2em auto;
+  height: 370px;
+  align-items: center;
+  border: 1px solid #ddd;
+}
+
+.canada-div, .russia-div, .afghanistan-div, .us-div {
+  padding: 2em;
+  max-width: 500px;
+}
+
+.projection-country {
+  font-weight: 600; 
+  color: #333;
+}
+
+.projection-title {
+  color: #666666;
+  font-weight: 600;
+  margin-bottom: 0.25em;
+}
+.projection-summary {
+  display: flex;
+  flex-direction: column;
+  margin: 0.25em auto 1em auto;
+  line-height: 1.5em;
+}
+
+.projection-a2 {
+  color: #de2d26;
+}
+
+.projection-b1 {
+  color: #fc9272;
+}
+
+.canada-div, .afghanistan-div, .russia-div, .us-div {
+  display: none;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .country-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    margin: auto;
+  }
+
+  .geopolitics-display {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    margin: 2em auto;
+    align-items: center;
+    height: auto;
+    border: none;
+  }
+
+  .mat-slider-horizontal {
+    height: 48px;
+    min-width: 250px;
+    margin: 0 2em;
+    display: flex;
+    max-width: 400px;
+  }
 }

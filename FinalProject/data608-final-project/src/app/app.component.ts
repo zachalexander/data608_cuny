@@ -16,6 +16,7 @@ import * as topTen_b1 from '../assets/top10_b1.json';
 import * as russiaMap from '../assets/russia.json';
 import * as afghanistanMap from '../assets/afghanistan.json';
 import * as canadaMap from '../assets/canada.json';
+import * as usMap from '../assets/us.json';
 import { setClassMetadata } from '@angular/core/src/r3_symbols';
 
 
@@ -44,12 +45,14 @@ export class AppComponent {
   russiaMapData = russiaMap['default']
   afghanistanMapData = afghanistanMap['default']
   canadaMapData = canadaMap['default']
+  usMapData = usMap['default']
 
   topTen_a2Data = topTen_a2['top-ten-bar-a2']
   topTen_b1Data = topTen_b1['top-ten-bar-b1']
 
   dateRange = ['2020 - 2040', '2040 - 2060', '2060 - 2080', '2080 - 2100'];
   titleTag;
+  divname;
 
   autoTicks = true;
   disabled = false;
@@ -64,6 +67,7 @@ export class AppComponent {
   tickInterval = 20;
 
   sliderDate;
+  drawCallout;
 
   jsons;
   jsons_a2 = [this.firstModelData, this.secondModelData, this.thirdModelData, this.fourthModelData];
@@ -73,6 +77,10 @@ export class AppComponent {
   scenarioBone = false;
 
   canadaPick = false;
+
+  svgWidth;
+  xMargin;
+  graphShift;
 
   getSliderTickInterval(): number | 'auto' {
     if (this.showTicks) {
@@ -86,17 +94,33 @@ export class AppComponent {
     let width = window.innerWidth;
     this.jsons = this.jsons_a2;
 
+    d3.select('.canada-div').style('display', 'block');
+
+    let windowWidth = width;
+
+    if (windowWidth <= 500) {
+      this.svgWidth = 375;
+      this.xMargin = 50;
+      this.graphShift = 50;
+    } else {
+      this.svgWidth = 400;
+      this.xMargin = 30;
+      this.graphShift = 40;
+    }
+    
     if (width > 500) {
       width = 500;
     }
-
+    
     this.setMap(1000, 600, this.jsons[0])
     this.drawBarChart(width, this.topTen_a2Data, '.top10-a2');
     this.drawBarChart(width, this.topTen_b1Data, '.top10-b1');
-
-    this.drawCountry(this.russiaMapData, '.russia-map', 300, 200, [0, 250], 90)
-    this.drawCountry(this.canadaMapData, '.canada-map', 300, 200, [310, 260], 90)
-    this.drawCountry(this.afghanistanMapData, '.afghanistan-map', 300, 200, [-480, 510], 650)
+    
+    this.drawCountry(this.russiaMapData, '.russia-map', 300, 200, [0, 250], 90, this.svgWidth, this.xMargin, this.graphShift)
+    this.drawCountry(this.canadaMapData, '.canada-map', 300, 200, [310, 260], 90, this.svgWidth, this.xMargin, this.graphShift)
+    this.drawCountry(this.afghanistanMapData, '.afghanistan-map', 300, 200, [-480, 510], 650, this.svgWidth, this.xMargin, this.graphShift)
+    this.drawCountry(this.usMapData, '.us-map', 300, 200, [400, 220], 120, this.svgWidth, this.xMargin, this.graphShift)
+    this.drawLineChart(this.canadaMapData, '.canada-div', this.svgWidth, this.xMargin, this.graphShift)
   }
 
   scenarioA2(){
@@ -320,7 +344,7 @@ export class AppComponent {
     .style('font-family', 'Montserrat')
   }
 
-  drawCountry(countryjson, countrydiv, width, height, translate, scale) {
+  drawCountry(countryjson, countrydiv, width, height, translate, scale, windowWidth, xMargin, graphShift) {
 
     const projection = d3.geoMercator()
     .rotate([-11, 0])
@@ -353,7 +377,7 @@ export class AppComponent {
       .on('mouseover', function (d) {
 
         d3.select(this)
-          .style('cursor', 'crosshair')
+          .style('cursor', 'pointer')
           .style('stroke-width', '1.5')
           .style('font-size', '2em')
 
@@ -369,18 +393,41 @@ export class AppComponent {
         
         const margin = {top: 10, right: 10, bottom: 10, left: 10};
 
+        if (d.properties.name === 'Canada') {
+          d3.select('.canada-div').style('display', 'block');
+          d3.select('.russia-div').style('display', 'none')
+          d3.select('.afghanistan-div').style('display', 'none')
+          d3.select('.us-div').style('display', 'none')
+        } else if (d.properties.name === 'Russia') {
+          d3.select('.russia-div').style('display', 'block')
+          d3.select('.afghanistan-div').style('display', 'none')
+          d3.select('.canada-div').style('display', 'none');
+          d3.select('.us-div').style('display', 'none')
+        } else if (d.properties.name === 'Afghanistan') {
+          d3.select('.afghanistan-div').style('display', 'block')
+          d3.select('.russia-div').style('display', 'none')
+          d3.select('.canada-div').style('display', 'none');
+          d3.select('.us-div').style('display', 'none')
+        } else if (d.properties.name === 'United States of America') {
+          d3.select('.afghanistan-div').style('display', 'none')
+          d3.select('.russia-div').style('display', 'none')
+          d3.select('.canada-div').style('display', 'none');
+          d3.select('.us-div').style('display', 'block')
+        }     
+
+ 
         const data = d['trend-data'];
-        const width = 400;
+        const width = windowWidth;
         const yheight = 200;
         const height = 300;
 
         const parseTime = d3.timeParse('%m/%d/%Y');
 
-        const x = d3.scaleTime().range([0, width - margin.left - margin.right - 30]);
+        const x = d3.scaleTime().range([0, width - margin.left - margin.right - xMargin]);
         x.domain(d3.extent(data, function(d) { return parseTime(d.date); }));
 
         const y = d3.scaleLinear().range([yheight, 0]).nice();
-        y.domain([0, d3.max(data, function(d) { return d.a2; })]);
+        y.domain([0, 12]);
 
 
         const valueline = d3.line()
@@ -394,24 +441,25 @@ export class AppComponent {
         .curve(d3.curveMonotoneX);
 
         const svg = d3.select('.line-wrapper').append('svg')
-        .attr('width',  width - margin.left - margin.right + 20)
+        .attr('width',  width - margin.left - margin.right + 30)
         .attr('height', height - margin.top - margin.bottom)
         .attr('x', 0)
         .attr('y', 0)
         .attr('class', 'jumbo')
         .append('g')
-        .attr('transform', 'translate(20, 0)')
+        .attr('transform', 'translate(' + graphShift + ', 0)')
+
 
         // Add the x-axis.
         svg.append('g')
               .attr("class", "y-axis")
               .attr("transform", "translate(0," + (margin.top + margin.bottom) + ")")
-              .call(d3.axisLeft(y).ticks(4).tickSizeOuter(0).tickSize(0));
+              .call(d3.axisLeft(y).ticks(4).tickSizeOuter(0).tickFormat(d => '+' + d + '\xB0' + 'F'));
 
         svg.append('g')
               .attr("class", "x-axis")
               .attr("transform", "translate(0," + (yheight + margin.top + margin.bottom) + ")")
-              .call(d3.axisBottom(x).ticks(4).tickSizeOuter(1).tickSize(0));
+              .call(d3.axisBottom(x).ticks(4).tickSizeOuter(1));
 
         d3.select('.x-axis .tick:first-child').remove()
 
@@ -430,6 +478,16 @@ export class AppComponent {
         .attr('stroke-width', '3px')
         .attr('stroke', '#fc9272')
         .attr('d', valueline_b);
+
+        const ext_color_domain = [25, 35, 45, 55, 65];
+
+
+        const ls_w = 15, ls_h = 15;
+
+        const legend = svg.append('g')
+        .data(ext_color_domain)
+        .attr('class', 'legend');
+
 
         const totalLength = path.node().getTotalLength();
 
@@ -452,6 +510,40 @@ export class AppComponent {
                 .ease(d3.easeLinear)
                 .attr('stroke-dashoffset', 0);
         });
+
+
+        legend.append('rect')
+          .attr('x', 20)
+          .attr('y', 30)
+          .attr('width', ls_w)
+          .attr('height', ls_h)
+          .style('fill', function (d, i) { return '#de2d26'; })
+          .style('opacity', 0.8);
+          
+        legend.append('rect')
+        .attr('x', 20)
+        .attr('y', 50)
+        .attr('width', ls_w)
+        .attr('height', ls_h)
+        .style('fill', function (d, i) { return '#fc9272'; })
+        .style('opacity', 0.8);
+
+        legend.append('text')
+        .attr('x', 40)
+        .attr('y', 42)
+        .attr('font-size', '12px')
+        .attr('font-weight', '500')
+        .attr('fill', '#de2d26')
+        .text('Scenario A2')
+
+        legend.append('text')
+          .attr('x', 40)
+          .attr('y', 62)
+          .attr('font-size', '12px')
+          .attr('font-weight', '500')
+          .attr('fill', '#fc9272')
+          .text('Scenario B1');
+
       })
 
     svg.selectAll('text')
@@ -471,6 +563,120 @@ export class AppComponent {
         return d.properties.name;
       })
 
+    
   }
 
-}
+  drawLineChart(countryjson, countrydiv, windowWidth, xMargin, graphShift) {
+       
+        const margin = {top: 10, right: 10, bottom: 10, left: 10};
+        const data = countryjson[0]['trend-data'];
+        const width = windowWidth;
+        const yheight = 200;
+        const height = 300;
+
+        const parseTime = d3.timeParse('%m/%d/%Y');
+
+        const x = d3.scaleTime().range([0, width - margin.left - margin.right - xMargin]);
+        x.domain(d3.extent(data, function(d) { return parseTime(d.date); }));
+
+        const y = d3.scaleLinear().range([yheight, 0]).nice();
+        y.domain([0, 12]);
+
+
+        const valueline = d3.line()
+        .x(function(d) { return x(parseTime(d.date)); })
+        .y(function(d) { return y(d.a2) + margin.top + margin.bottom; })
+        .curve(d3.curveMonotoneX);
+
+        const valueline_b = d3.line()
+        .x(function(d) { return x(parseTime(d.date)); })
+        .y(function(d) { return y(d.b1) + margin.top + margin.bottom; })
+        .curve(d3.curveMonotoneX);
+
+        const svg = d3.select('.line-wrapper').append('svg')
+        .attr('width',  width - margin.left - margin.right + 30)
+        .attr('height', height - margin.top - margin.bottom)
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('class', 'jumbo')
+        .append('g')
+        .attr('transform', 'translate(' + graphShift + ', 0)')
+
+        // Add the x-axis.
+        svg.append('g')
+              .attr("class", "y-axis")
+              .attr("transform", "translate(0," + (margin.top + margin.bottom) + ")")
+              .call(d3.axisLeft(y).ticks(4).tickSizeOuter(0).tickFormat(d => '+' + d + '\xB0' + 'F'));
+
+        svg.append('g')
+              .attr("class", "x-axis")
+              .attr("transform", "translate(0," + (yheight + margin.top + margin.bottom) + ")")
+              .call(d3.axisBottom(x).ticks(4).tickSizeOuter(1));
+
+        d3.select('.x-axis .tick:first-child').remove()
+
+        const path = svg.append('path')
+        .datum(data)
+        .attr('class', 'line')
+        .attr('fill', 'none')
+        .attr('stroke-width', '3px')
+        .attr('stroke', '#de2d26')
+        .attr('d', valueline);
+
+        const path_b = svg.append('path')
+        .datum(data)
+        .attr('class', 'line')
+        .attr('fill', 'none')
+        .attr('stroke-width', '3px')
+        .attr('stroke', '#fc9272')
+        .attr('d', valueline_b);
+
+        const ext_color_domain = [25, 35, 45, 55, 65];
+
+        const ls_w = 15, ls_h = 15;
+
+        const legend = svg.append('g')
+        .data(ext_color_domain)
+        .attr('class', 'legend');
+
+        legend.append('rect')
+          .attr('x', 20)
+          .attr('y', 30)
+          .attr('width', ls_w)
+          .attr('height', ls_h)
+          .style('fill', function (d, i) { return '#de2d26'; })
+          .style('opacity', 0.8);
+          
+        legend.append('rect')
+        .attr('x', 20)
+        .attr('y', 50)
+        .attr('width', ls_w)
+        .attr('height', ls_h)
+        .style('fill', function (d, i) { return '#fc9272'; })
+        .style('opacity', 0.8);
+
+        legend.append('text')
+        .attr('x', 40)
+        .attr('y', 42)
+        .attr('font-size', '12px')
+        .attr('font-weight', '500')
+        .attr('fill', '#de2d26')
+        .text('Scenario A2')
+
+        legend.append('text')
+          .attr('x', 40)
+          .attr('y', 62)
+          .attr('font-size', '12px')
+          .attr('font-weight', '500')
+          .attr('fill', '#fc9272')
+          .text('Scenario B1');
+
+      }
+
+      scrollDiv($element): void {
+        $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      }
+
+
+  }
+
