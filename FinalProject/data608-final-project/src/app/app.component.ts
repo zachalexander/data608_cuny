@@ -82,6 +82,8 @@ export class AppComponent {
   xMargin;
   graphShift;
 
+  scenario = 'Scenario A2';
+
   getSliderTickInterval(): number | 'auto' {
     if (this.showTicks) {
       return this.autoTicks ? 'auto' : this.tickInterval;
@@ -128,6 +130,8 @@ export class AppComponent {
     this.scenarioBone = false;
     this.jsons = this.jsons_a2;
 
+    this.scenario = 'Scenario A2';
+
     d3.select('svg').remove();
 
     this.setMap(1000, 600, this.jsons[0])
@@ -137,6 +141,8 @@ export class AppComponent {
     this.scenarioAtwo = false;
     this.scenarioBone = true;
     this.jsons = this.jsons_b1;
+
+    this.scenario = 'Scenario B1';
 
     d3.select('svg').remove();
 

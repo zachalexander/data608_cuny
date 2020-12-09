@@ -4,6 +4,8 @@
 
   html, body {
     font-family: 'Montserrat', 'Roboto', 'Arial', sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-feature-settings: "kern" 1;
     color: #333;
   }
 
@@ -19,13 +21,18 @@
       color: #333;
   }
   
-  .top-summary {
+  .top-summary, .mid-summary, .third-summary {
     display: flex;
+    flex-direction: column;
     margin: 0 auto 2em auto;
     max-width: 700px;
     line-height: 2em;
     font-size: 1.15em;
     padding: 1em;
+  }
+
+  .strong-weight {
+    font-weight: 500;
   }
 
   .scenario-div {
@@ -120,7 +127,6 @@
 }
 
 .summary {
-  display: flex;
   margin: 0 auto 1.5em auto;
   max-width: 600px;
   padding: 1em;   
